@@ -4,20 +4,24 @@ router = express.Router();
 
 var candies = [
 	{
-		"id":1,"name":"Chewing Gum",
+		"id":1,
+		"name":"Chewing Gum",
 		"color":"Red"
 	}
 	,
 	{
-		"id":2,"name":"Pez",
+		"id":2,
+		"name":"Pez",
 		"color":"Green"
 	},
 	{
-		"id":3,"name":"Marshmallow",
+		"id":3,
+		"name":"Marshmallow",
 		"color":"Pink"
 	},
 	{
-		"id":4,"name":"Candy Stick",
+		"id":4,
+		"name":"Candy Stick",
 		"color":"Blue"
 	}
 ];
@@ -33,12 +37,37 @@ router.get('/', function(req,res) {
 
 router.get('/:id', function(req,res) {
 	candies.forEach(function(candy) {
-		if (req.params.id == candy.id){
+		if (candy == null) {
+			res.send({"message": "candy doesnt exist"});
+		} else if (req.params.id == candy.id){
 			res.json(candy);
 		}
 	})
 });
 
+router.post('/', function(req, res) {
+	candies.push(req.body);
+	res.json(req.body);
+});
+
+router.put('/:id', function(req,res) {
+	candies.forEach(function(candy) {
+		if (req.params.id == candy.id){
+			candy.name = req.body.name;
+			candy.color = req.body.color;
+			res.send(candy);
+		}
+	})
+});
+
+router.delete('/:id', function(req,res){
+	candies.forEach(function(candy, index) {
+		if (req.params.id == candy.id) {
+			candies[index] = null;
+			res.send({"message": "deleted"});
+		}
+	})
+});
 // Fill out the rest of the routes here
 
 module.exports = router;
